@@ -23,7 +23,9 @@ Singleton {
         "wpsoffice": "wps-office2019-kprometheus",
         "footclient": "foot",
         "zen": "zen-browser",
-        "brave-browser": "brave-desktop"
+        "brave-browser": "brave-desktop",
+        "net.lutris.lutris": "net.lutris.Lutris",
+        "org.gnome.texteditor": "org.gnome.TextEditor"
     })
     property var regexSubstitutions: [
         {
