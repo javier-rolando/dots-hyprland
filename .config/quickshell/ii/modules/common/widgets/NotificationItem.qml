@@ -35,6 +35,20 @@ Item { // Notification item area
 
     implicitHeight: background.implicitHeight
 
+    property bool isTwitchNotification: (notificationObject.body || "").toLowerCase().includes("from twitch")
+    property bool isKickNotification: (notificationObject.body || "").toLowerCase().includes("from kick")
+
+    readonly property var streamerMap: {
+        "夜巡ハナ": "hanayomeguri",
+        "魔ノむえる": "manomueru",
+        "あるばいとしまむら": "shimamur4",
+        "ひなちょまる": "hina_chomaru"
+    }
+
+    function extractStreamer(body) {
+        return body.split(" ")[0].toLowerCase();
+    }
+
     function processNotificationBody(body, appName) {
         let processedBody = body
         
@@ -122,6 +136,7 @@ Item { // Notification item area
         }
 
         image: notificationObject.image
+        body: notificationObject.body
         anchors.right: background.left
         anchors.top: background.top
         anchors.rightMargin: 10
@@ -271,10 +286,24 @@ Item { // Notification item area
                             model: notificationObject.actions
                             NotificationActionButton {
                                 Layout.fillWidth: true
-                                buttonText: modelData.text
+                                buttonText: (modelData.identifier === "default" && (isTwitchNotification || isKickNotification)) ? "View" : modelData.text
                                 urgency: notificationObject.urgency
                                 onClicked: {
-                                    Notifications.attemptInvokeAction(notificationObject.id, modelData.identifier);
+                                    if (modelData.identifier === "default") {
+                                        if (isTwitchNotification) {
+                                            const channel = extractStreamer(notificationObject.body);
+                                            Qt.openUrlExternally("https://www.twitch.tv/" + (streamerMap[channel] || channel || ""));
+                                            Notifications.discardNotification(notificationObject.id);
+                                        } else if (isKickNotification) {
+                                            const channel = extractStreamer(notificationObject.body);
+                                            Qt.openUrlExternally("https://kick.com/" + (channel || ""));
+                                            Notifications.discardNotification(notificationObject.id);
+                                        } else {
+                                            Notifications.attemptInvokeAction(notificationObject.id, modelData.identifier);
+                                        }
+                                    } else {
+                                        Notifications.attemptInvokeAction(notificationObject.id, modelData.identifier);
+                                    }
                                 }
                             }
                         }
@@ -285,11 +314,20 @@ Item { // Notification item area
                             implicitWidth: (notificationObject.actions.length == 0) ? ((actionsFlickable.width - actionRowLayout.spacing) / 2) : 
                                 (contentItem.implicitWidth + leftPadding + rightPadding)
 
-                            onClicked: {
-                                Quickshell.clipboardText = notificationObject.body
-                                copyIcon.text = "inventory"
-                                copyIconTimer.restart()
-                            }
+                                onClicked: {
+                                    if (isTwitchNotification) {
+                                        const channel = extractStreamer(notificationObject.body);
+                                        Quickshell.clipboardText = "https://www.twitch.tv/" + (streamerMap[channel] || channel || "")
+                                    } else if (isKickNotification) {
+                                        const channel = extractStreamer(notificationObject.body)
+                                        Quickshell.clipboardText = "https://kick.com/" + (channel || "")
+                                    } else {
+                                        Quickshell.clipboardText = notificationObject.body
+                                    }
+
+                                    copyIcon.text = "inventory"
+                                    copyIconTimer.restart()
+                                }
 
                             Timer {
                                 id: copyIconTimer

@@ -150,6 +150,8 @@ Item { // Notification group area
                 image: root?.multipleNotifications ? "" : notificationGroup?.notifications[0]?.image ?? ""
                 appIcon: notificationGroup?.appIcon
                 summary: notificationGroup?.notifications[root.notificationCount - 1]?.summary
+		body: notificationGroup?.notifications[root.notificationCount - 1]?.body
+		notificationBodies: notificationGroup?.notifications.map(n => n.body || "")
             }
 
             ColumnLayout { // Content

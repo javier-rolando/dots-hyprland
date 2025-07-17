@@ -12,8 +12,10 @@ Rectangle { // App icon
     id: root
     property var appIcon: ""
     property var summary: ""
+    property var body: ""
     property var urgency: NotificationUrgency.Normal
     property var image: ""
+    property var notificationBodies: []
     property real scale: 1
     property real size: 45 * scale
     property real materialIconScale: 0.57
@@ -22,6 +24,18 @@ Rectangle { // App icon
     property real materialIconSize: size * materialIconScale
     property real appIconSize: size * appIconScale
     property real smallAppIconSize: size * smallAppIconScale
+
+    function lowerBodies() {
+	    return notificationBodies.length > 0
+	    ? notificationBodies.map(b => (b || "").toLowerCase())
+	    : [body?.toLowerCase() || ""]
+    }
+
+    property bool isTwitchNotification: lowerBodies().length > 0 &&
+    lowerBodies().every(b => b.includes("from twitch"))
+
+    property bool isKickNotification: lowerBodies().length > 0 &&
+    lowerBodies().every(b => b.includes("from kick"))
 
     implicitWidth: size
     implicitHeight: size
@@ -60,7 +74,7 @@ Rectangle { // App icon
     }
     Loader {
         id: notifImageLoader
-        active: root.image != ""
+        active: root.image != "" || root.isTwitchNotification || root.isKickNotification
         anchors.fill: parent
         sourceComponent: Item {
             anchors.fill: parent
@@ -69,7 +83,11 @@ Rectangle { // App icon
                 anchors.fill: parent
                 readonly property int size: parent.width
 
-                source: root.image
+                source: root.isTwitchNotification
+                ? Quickshell.configPath("assets/images/twitch.jpg")
+                : root.isKickNotification
+                ? Quickshell.configPath("assets/images/kick.webp")
+                : root.image
                 fillMode: Image.PreserveAspectCrop
                 cache: false
                 antialiasing: true
@@ -91,7 +109,7 @@ Rectangle { // App icon
             }
             Loader {
                 id: notifImageAppIconLoader
-                active: root.appIcon != ""
+                active: root.appIcon != "" && !root.isTwitchNotification && !root.isKickNotification
                 anchors.bottom: parent.bottom
                 anchors.right: parent.right
                 sourceComponent: IconImage {
