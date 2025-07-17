@@ -307,6 +307,10 @@ Scope {
                                     visible: (barRoot.useShortenedForm < 2 && UPower.displayDevice.isLaptopBattery)
                                     Layout.alignment: Qt.AlignVCenter
                                 }
+
+                                UpdateChecker {
+                                    Layout.alignment: Qt.AlignVCenter
+                                }
                             }
                         }
 
@@ -342,7 +346,8 @@ Scope {
                             if (event.button === Qt.LeftButton) {
                                 Hyprland.dispatch('global quickshell:sidebarRightOpen');
                             } else if (event.button === Qt.RightButton) {
-                                MprisController.activePlayer.next();
+                                // MprisController.activePlayer.next();
+                                Hyprland.dispatch("exec wpctl set-mute @DEFAULT_AUDIO_SINK@ toggle")
                             }
                         }
                         // Scroll to change volume
