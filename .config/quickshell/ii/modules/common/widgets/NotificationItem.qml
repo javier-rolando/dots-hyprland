@@ -84,7 +84,7 @@ Item { // Notification item area
             easing.bezierCurve: Appearance.animation.elementMove.bezierCurve
         }
         onFinished: () => {
-            Notifications.discardNotification(notificationObject.id);
+            Notifications.discardNotification(notificationObject.notificationId);
         }
     }
 
@@ -223,7 +223,7 @@ Item { // Notification item area
                     elide: Text.ElideRight
                     textFormat: Text.RichText
                     text: {
-                        return `<style>img{max-width:${notificationBodyText.width}px;}</style>` + 
+                        return `<style>img{max-width:${300 /* binding to notificationBodyText.width would cause a binding loop */}px;}</style>` + 
                                `${processNotificationBody(notificationObject.body, notificationObject.appName || notificationObject.summary).replace(/\n/g, "<br/>")}`
                     }
 
@@ -288,16 +288,16 @@ Item { // Notification item area
                                         if (isTwitchNotification) {
                                             const channel = extractStreamer(notificationObject.body);
                                             Qt.openUrlExternally("https://www.twitch.tv/" + (streamerMap[channel] || channel || ""));
-                                            Notifications.discardNotification(notificationObject.id);
+                                            Notifications.discardNotification(notificationObject.notificationId);
                                         } else if (isKickNotification) {
                                             const channel = extractStreamer(notificationObject.body);
                                             Qt.openUrlExternally("https://kick.com/" + (channel || ""));
-                                            Notifications.discardNotification(notificationObject.id);
+                                            Notifications.discardNotification(notificationObject.notificationId);
                                         } else {
-                                            Notifications.attemptInvokeAction(notificationObject.id, modelData.identifier);
+                                            Notifications.attemptInvokeAction(notificationObject.notificationId, modelData.identifier);
                                         }
                                     } else {
-                                        Notifications.attemptInvokeAction(notificationObject.id, modelData.identifier);
+                                        Notifications.attemptInvokeAction(notificationObject.notificationId, modelData.identifier);
                                     }
                                 }
                             }
