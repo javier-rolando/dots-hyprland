@@ -19,7 +19,6 @@ Scope {
     readonly property real fixedClockY: Config.options.background.clockY
 
     Variants {
-        // For each monitor
         model: Quickshell.screens
 
         PanelWindow {
@@ -52,7 +51,8 @@ Scope {
             // Layer props
             screen: modelData
             exclusionMode: ExclusionMode.Ignore
-            WlrLayershell.layer: WlrLayer.Bottom
+            WlrLayershell.layer: GlobalStates.screenLocked ? WlrLayer.Top : WlrLayer.Bottom
+            // WlrLayershell.layer: WlrLayer.Bottom
             WlrLayershell.namespace: "quickshell:background"
             anchors {
                 top: true
@@ -186,7 +186,7 @@ Scope {
                     ColumnLayout {
                         id: clockColumn
                         anchors.centerIn: parent
-                        spacing: -5
+                        spacing: 0
 
                         StyledText {
                             Layout.fillWidth: true
@@ -203,6 +203,7 @@ Scope {
                         }
                         StyledText {
                             Layout.fillWidth: true
+                            Layout.topMargin: -5
                             horizontalAlignment: bgRoot.textHorizontalAlignment
                             font {
                                 family: Appearance.font.family.expressive
@@ -215,6 +216,60 @@ Scope {
                             text: DateTime.date
                         }
                     }
+
+                    RowLayout {
+                        anchors {
+                            top: clockColumn.bottom
+                            left: bgRoot.textHorizontalAlignment === Text.AlignLeft ? clockColumn.left : undefined
+                            right: bgRoot.textHorizontalAlignment === Text.AlignRight ? clockColumn.right : undefined
+                            horizontalCenter: bgRoot.textHorizontalAlignment === Text.AlignHCenter ? clockColumn.horizontalCenter : undefined
+                            topMargin: 5
+                            leftMargin: -5
+                            rightMargin: -5
+                        }
+                        opacity: GlobalStates.screenLocked ? 1 : 0
+                        visible: opacity > 0
+                        Behavior on opacity {
+                            animation: Appearance.animation.elementMoveFast.numberAnimation.createObject(this)
+                        }
+                        Item { Layout.fillWidth: bgRoot.textHorizontalAlignment !== Text.AlignLeft; implicitWidth: 1 }
+                        MaterialSymbol {
+                            text: "lock"
+                            Layout.fillWidth: false
+                            iconSize: Appearance.font.pixelSize.huge
+                            color: bgRoot.colText
+                        }
+                        StyledText {
+                            Layout.fillWidth: false
+                            text: "Locked"
+                            color: bgRoot.colText
+                            font {
+                                pixelSize: Appearance.font.pixelSize.larger
+                            }
+                        }
+                        Item { Layout.fillWidth: bgRoot.textHorizontalAlignment !== Text.AlignRight; implicitWidth: 1 }
+
+                    }
+                }
+            }
+
+            // Password prompt
+            StyledText {
+                anchors {
+                    horizontalCenter: parent.horizontalCenter
+                    bottom: parent.bottom
+                    bottomMargin: 30
+                }
+                opacity: (GlobalStates.screenLocked && !GlobalStates.screenLockContainsCharacters) ? 1 : 0
+                scale: opacity
+                visible: opacity > 0
+                Behavior on opacity {
+                    animation: Appearance.animation.elementMoveFast.numberAnimation.createObject(this)
+                }
+                text: "Enter password"
+                color: CF.ColorUtils.transparentize(bgRoot.colText, 0.5)
+                font {
+                    pixelSize: Appearance.font.pixelSize.normal
                 }
             }
         }
