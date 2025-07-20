@@ -61,7 +61,7 @@ Item {
             StyledText {
                 text: root.updatesCount > 0 ? `${root.updatesCount}` : "-"
                 color: Appearance.colors.colOnLayer1
-                font.pixelSize: Appearance.font.pixelSize.normal
+                font.pixelSize: Appearance.font.pixelSize.small
             }
         }
     }
