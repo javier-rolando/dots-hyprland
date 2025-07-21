@@ -84,7 +84,7 @@ Singleton {
     }
 
     function getReverseDomainNameAppName(str) {
-        return str.split('.').slice(-1)[0].toLowerCase()
+        return str.split('.').slice(-1)[0]
     }
 
     function getKebabNormalizedAppName(str) {
@@ -113,8 +113,14 @@ Singleton {
 
 
         // Simple guesses
+        const lowercased = str.toLowerCase();
+        if (iconExists(lowercased)) return lowercased;
+
         const reverseDomainNameAppName = getReverseDomainNameAppName(str);
         if (iconExists(reverseDomainNameAppName)) return reverseDomainNameAppName;
+
+        const lowercasedDomainNameAppName = reverseDomainNameAppName.toLowerCase();
+        if (iconExists(lowercasedDomainNameAppName)) return lowercasedDomainNameAppName;
 
         const kebabNormalizedGuess = getKebabNormalizedAppName(str);
         if (iconExists(kebabNormalizedGuess)) return kebabNormalizedGuess;
