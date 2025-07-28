@@ -4,11 +4,11 @@ ApiStrategy {
     property bool isReasoning: false
     
     function buildEndpoint(model: AiModel): string {
-        console.log("[AI] Endpoint: " + model.endpoint);
+        // console.log("[AI] Endpoint: " + model.endpoint);
         return model.endpoint;
     }
 
-    function buildRequestData(model: AiModel, messages, systemPrompt: string, temperature: real) {
+    function buildRequestData(model: AiModel, messages, systemPrompt: string, temperature: real, tools: list<var>) {
         let baseData = {
             "model": model.model,
             "messages": [
