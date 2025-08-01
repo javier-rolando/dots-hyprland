@@ -97,7 +97,7 @@ Rectangle {
             }
         }
 
-        Flickable { // Tag strip
+        StyledFlickable { // Tag strip
             id: tagsFlickable
             visible: root.responseData.tags.length > 0
             Layout.alignment: Qt.AlignLeft
@@ -158,7 +158,7 @@ Rectangle {
             textFormat: Text.MarkdownText
             onLinkActivated: (link) => {
                 Qt.openUrlExternally(link)
-                Hyprland.dispatch("global quickshell:sidebarLeftClose")
+                GlobalStates.sidebarLeftOpen = false
             }
             PointingHandLinkHover {}
         }
