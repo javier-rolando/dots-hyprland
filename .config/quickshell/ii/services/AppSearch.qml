@@ -23,7 +23,8 @@ Singleton {
         "zen": "zen-browser",
         "brave-browser": "brave-desktop",
         "net.lutris.lutris": "net.lutris.Lutris",
-        "org.gnome.texteditor": "org.gnome.TextEditor"
+        "org.gnome.texteditor": "org.gnome.TextEditor",
+        "org.kde.kdeconnect.app": "kdeconnect"
     })
     property var regexSubstitutions: [
         {
