@@ -244,6 +244,10 @@ Item { // Bar content region
                     visible: (root.useShortenedForm < 2 && UPower.displayDevice.isLaptopBattery)
                     Layout.alignment: Qt.AlignVCenter
                 }
+
+                UpdateChecker {
+                    Layout.alignment: Qt.AlignVCenter
+                }
             }
         }
 
