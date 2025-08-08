@@ -283,7 +283,8 @@ Item { // Bar content region
             if (event.button === Qt.LeftButton) {
                 GlobalStates.sidebarRightOpen = !GlobalStates.sidebarRightOpen;
             } else if (event.button === Qt.RightButton) {
-                MprisController.activePlayer.next();
+                // MprisController.activePlayer.next();
+                Hyprland.dispatch("exec wpctl set-mute @DEFAULT_AUDIO_SINK@ toggle");
             }
         }
         // Scroll to change volume
