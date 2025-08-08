@@ -18,14 +18,6 @@ Scope {
     readonly property int osdHideMouseMoveThreshold: 20
     property bool showBarBackground: Config.options.bar.showBackground
 
-    component VerticalBarSeparator: Rectangle {
-        Layout.topMargin: Appearance.sizes.baseBarHeight / 3
-        Layout.bottomMargin: Appearance.sizes.baseBarHeight / 3
-        Layout.fillHeight: true
-        implicitWidth: 1
-        color: Appearance.colors.colOutlineVariant
-    }
-
     Variants {
         // For each monitor
         model: {
@@ -63,8 +55,9 @@ Scope {
                     right: true
                 }
 
-                Item { // Bar content region
+                BarContent {
                     id: barContent
+                    
                     anchors {
                         right: parent.right
                         left: parent.left
@@ -72,7 +65,6 @@ Scope {
                         bottom: undefined
                     }
                     implicitHeight: Appearance.sizes.barHeight
-                    height: Appearance.sizes.barHeight
 
                     states: State {
                         name: "bottom"
@@ -306,10 +298,6 @@ Scope {
                                     visible: (barRoot.useShortenedForm < 2 && UPower.displayDevice.isLaptopBattery)
                                     Layout.alignment: Qt.AlignVCenter
                                 }
-
-                                UpdateChecker {
-                                    Layout.alignment: Qt.AlignVCenter
-                                }
                             }
                         }
 
@@ -345,8 +333,7 @@ Scope {
                             if (event.button === Qt.LeftButton) {
                                 GlobalStates.sidebarRightOpen = !GlobalStates.sidebarRightOpen;
                             } else if (event.button === Qt.RightButton) {
-                                // MprisController.activePlayer.next();
-                                Hyprland.dispatch("exec wpctl set-mute @DEFAULT_AUDIO_SINK@ toggle")
+                                MprisController.activePlayer.next();
                             }
                         }
                         // Scroll to change volume
@@ -545,7 +532,7 @@ Scope {
                                 left: parent.left
                             }
 
-                            size: Appearance.rounding.screenRounding
+                            implicitSize: Appearance.rounding.screenRounding
                             color: showBarBackground ? Appearance.colors.colLayer0 : "transparent"
 
                             corner: RoundCorner.CornerEnum.TopLeft
@@ -564,7 +551,7 @@ Scope {
                                 top: !Config.options.bar.bottom ? parent.top : undefined
                                 bottom: Config.options.bar.bottom ? parent.bottom : undefined
                             }
-                            size: Appearance.rounding.screenRounding
+                            implicitSize: Appearance.rounding.screenRounding
                             color: showBarBackground ? Appearance.colors.colLayer0 : "transparent"
 
                             corner: RoundCorner.CornerEnum.TopRight
