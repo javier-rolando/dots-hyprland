@@ -2,9 +2,6 @@ import "./weather"
 import QtQuick
 import QtQuick.Layouts
 import Quickshell
-import Quickshell.Io
-import Quickshell.Wayland
-import Quickshell.Hyprland
 import Quickshell.Services.UPower
 import qs
 import qs.services
@@ -425,8 +422,8 @@ Item { // Bar content region
                 Layout.leftMargin: 8
                 Layout.fillHeight: true
                 active: Config.options.bar.weather.enable
+
                 sourceComponent: BarGroup {
-                    implicitHeight: Appearance.sizes.baseBarHeight
                     WeatherBar {}
                 }
             }

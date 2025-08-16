@@ -183,6 +183,11 @@ Singleton {
                 property int suspend: 3
             }
 
+            property JsonObject conflictKiller: JsonObject {
+                property bool autoKillNotificationDaemons: false
+                property bool autoKillTrays: false
+            }
+
             property JsonObject dock: JsonObject {
                 property bool enable: false
                 property bool monochromeIcons: true
@@ -280,6 +285,7 @@ Singleton {
             property JsonObject time: JsonObject {
                 // https://doc.qt.io/qt-6/qtime.html#toString
                 property string format: "hh:mm"
+                property string shortDateFormat: "dd/MM"
                 property string dateFormat: "ddd, dd/MM"
                 property JsonObject pomodoro: JsonObject {
                     property string alertSound: ""
