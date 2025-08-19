@@ -241,6 +241,21 @@ Variants {
                     style: Text.Raised
                     styleColor: Appearance.colors.colShadow
                     text: DateTime.date
+                    animateChange: true
+                }
+                StyledText {
+                    Layout.fillWidth: true
+                    horizontalAlignment: bgRoot.textHorizontalAlignment
+                    font {
+                        family: Appearance.font.family.expressive
+                        pixelSize: 20
+                        weight: Font.DemiBold
+                    }
+                    color: bgRoot.colText
+                    style: Text.Raised
+                    visible: Config.options.background.mantra !== ""
+                    styleColor: Appearance.colors.colShadow
+                    text: Config.options.background.mantra
                 }
                 StyledText {
                     Layout.fillWidth: true
