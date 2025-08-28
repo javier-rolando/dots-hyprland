@@ -4,6 +4,7 @@ import QtQuick.Layouts
 import Quickshell
 import Quickshell.Bluetooth
 import Quickshell.Services.UPower
+import Quickshell.Hyprland
 import qs
 import qs.services
 import qs.modules.common
@@ -212,9 +213,15 @@ Item { // Bar content region
             Audio.sink.audio.volume = Math.min(1, Audio.sink.audio.volume + step);
         }
         onMovedAway: GlobalStates.osdVolumeOpen = false;
+
+        acceptedButtons: Qt.RightButton
+
         onPressed: event => {
             if (event.button === Qt.LeftButton) {
                 GlobalStates.sidebarRightOpen = !GlobalStates.sidebarRightOpen;
+            }
+            if (event.button === Qt.RightButton) {
+                Hyprland.dispatch("exec wpctl set-mute @DEFAULT_AUDIO_SINK@ toggle")
             }
         }
 
