@@ -210,7 +210,7 @@ Item { // Bar content region
         }
         onMovedAway: GlobalStates.osdVolumeOpen = false;
 
-        acceptedButtons: Qt.RightButton
+        acceptedButtons: Qt.LeftButton | Qt.RightButton
 
         onPressed: event => {
             if (event.button === Qt.LeftButton) {
