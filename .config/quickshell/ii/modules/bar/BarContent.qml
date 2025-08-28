@@ -182,10 +182,6 @@ Item { // Bar content region
                     visible: (root.useShortenedForm < 2 && UPower.displayDevice.isLaptopBattery)
                     Layout.alignment: Qt.AlignVCenter
                 }
-
-                UpdateChecker {
-                    Layout.alignment: Qt.AlignVCenter
-                }
             }
         }
     }
@@ -348,6 +344,12 @@ Item { // Bar content region
                 sourceComponent: BarGroup {
                     WeatherBar {}
                 }
+            }
+
+            BarGroup {
+                Layout.leftMargin: 4
+
+                UpdateChecker {}
             }
         }
     }

@@ -8,12 +8,16 @@ import Quickshell
 import Quickshell.Io
 import Quickshell.Hyprland
 
-Item {
+MouseArea {
     id: root
     property int updatesCount: 0
 
-    implicitWidth: 40
-    implicitHeight: 32
+    implicitWidth: rowLayout.implicitWidth + 10 * 2
+    implicitHeight: Appearance.sizes.barHeight
+    // anchors.fill: parent
+    onClicked: {
+        Hyprland.dispatch("togglespecialworkspace update");
+    }
 
     Timer {
         id: pollTimer
@@ -42,27 +46,20 @@ Item {
         }
     }
 
-    MouseArea {
-        anchors.fill: parent
-        onClicked: {
-            Hyprland.dispatch("togglespecialworkspace update");
+    RowLayout {
+        id: rowLayout
+        anchors.centerIn: parent
+
+        MaterialSymbol {
+            text: "update"
+            iconSize: Appearance.font.pixelSize.large
+            color: Appearance.colors.colOnLayer1
         }
 
-        RowLayout {
-            spacing: 4
-            anchors.centerIn: parent
-
-            MaterialSymbol {
-                text: "update"
-                iconSize: Appearance.font.pixelSize.large
-                color: Appearance.colors.colOnLayer1
-            }
-
-            StyledText {
-                text: root.updatesCount > 0 ? `${root.updatesCount}` : "-"
-                color: Appearance.colors.colOnLayer1
-                font.pixelSize: Appearance.font.pixelSize.small
-            }
+        StyledText {
+            text: root.updatesCount > 0 ? `${root.updatesCount}` : "-"
+            color: Appearance.colors.colOnLayer1
+            font.pixelSize: Appearance.font.pixelSize.small
         }
     }
 }
