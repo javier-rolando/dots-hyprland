@@ -9,6 +9,7 @@ import QtQuick.Controls
 import QtQuick.Layouts
 import Quickshell
 import Quickshell.Widgets
+import Quickshell.Hyprland
 
 DockButton {
     id: root
@@ -57,6 +58,33 @@ DockButton {
     }
 
     onClicked: {
+        const specialWorkspaces = {
+            "kitty-special": "term",
+            "kitty-yazi": "yazi",
+            "kitty-update": "update",
+            "kitty-install": "install",
+            "kitty-uninstall": "uninstall",
+            "kitty-btop": "btop",
+            "kitty-english": "english",
+            "eu.betterbird.betterbird": "betterbird",
+            "ferdium": "ferdium",
+            "vesktop": "vesktop",
+            "spotify": "spotify",
+            "chromium-chatgpt": "openai",
+            "chromium-translate": "translate"
+        };
+
+        const workspaceName = specialWorkspaces[appToplevel.appId];
+
+        if (workspaceName) {
+            if (appToplevel.toplevels.length > 0) {
+                Hyprland.dispatch(`togglespecialworkspace ${workspaceName}`);
+            }
+            // NOTE: Launch logic is removed as per your implementation.
+            // If you want to launch the app when it's closed, add an 'else' block here.
+            return;
+        }
+
         if (appToplevel.toplevels.length === 0) {
             root.desktopEntry?.execute();
             return;

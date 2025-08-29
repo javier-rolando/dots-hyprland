@@ -24,7 +24,9 @@ Singleton {
         "brave-browser": "brave-desktop",
         "net.lutris.lutris": "net.lutris.Lutris",
         "org.gnome.texteditor": "org.gnome.TextEditor",
-        "org.kde.kdeconnect.app": "kdeconnect"
+        "org.kde.kdeconnect.app": "kdeconnect",
+        "kitty-yazi": "yazi",
+        "kitty-btop": "btop",
     })
     property var regexSubstitutions: [
         {
