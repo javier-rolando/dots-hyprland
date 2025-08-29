@@ -2,7 +2,6 @@ import "./weather"
 import QtQuick
 import QtQuick.Layouts
 import Quickshell
-import Quickshell.Bluetooth
 import Quickshell.Services.UPower
 import Quickshell.Hyprland
 import qs
@@ -314,10 +313,7 @@ Item { // Bar content region
                         color: rightSidebarButton.colText
                     }
                     MaterialSymbol {
-                        readonly property bool bluetoothEnabled: Bluetooth.defaultAdapter?.enabled
-                        readonly property BluetoothDevice bluetoothDevice: Bluetooth.defaultAdapter?.devices.values.find(device => device.connected)
-                        readonly property bool bluetoothConnected: bluetoothDevice !== undefined
-                        text: bluetoothConnected ? "bluetooth_connected" : bluetoothEnabled ? "bluetooth" : "bluetooth_disabled"
+                        text: BluetoothStatus.connected ? "bluetooth_connected" : BluetoothStatus.enabled ? "bluetooth" : "bluetooth_disabled"
                         iconSize: Appearance.font.pixelSize.larger
                         color: rightSidebarButton.colText
                     }
