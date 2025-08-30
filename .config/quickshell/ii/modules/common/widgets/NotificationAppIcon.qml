@@ -82,9 +82,9 @@ Rectangle { // App icon
                 readonly property int size: parent.width
 
                 source: root.isTwitchNotification
-                ? Quickshell.configPath("assets/images/twitch.jpg")
+                ? Quickshell.shellPath("assets/images/twitch.jpg")
                 : root.isKickNotification
-                ? Quickshell.configPath("assets/images/kick.webp")
+                ? Quickshell.shellPath("assets/images/kick.webp")
                 : root.image
                 fillMode: Image.PreserveAspectCrop
                 cache: false
