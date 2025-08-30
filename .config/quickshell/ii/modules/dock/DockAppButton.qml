@@ -29,8 +29,8 @@ DockButton {
         // "kitty-install": "install",
         // "kitty-uninstall": "uninstall",
         // "kitty-english": "english",
-        "chromium-chatgpt": { type: "path", value: "/home/javier/.config/quickshell/ii/assets/dock/ChatGPT.svg" },
-        "chromium-translate": { type: "path", value: "/home/javier/.config/quickshell/ii/assets/dock/translate.svg" },
+        "chrome-chat.openai.com__-default": { type: "path", value: "/home/javier/.config/quickshell/ii/assets/dock/ChatGPT.svg" },
+        "chrome-translate.google.com__-default": { type: "path", value: "/home/javier/.config/quickshell/ii/assets/dock/translate.svg" },
     }
 
     property var desktopEntry: DesktopEntries.byId(appToplevel.appId)
@@ -81,8 +81,8 @@ DockButton {
             "ferdium": "ferdium",
             "vesktop": "vesktop",
             "spotify": "spotify",
-            "chromium-chatgpt": "openai",
-            "chromium-translate": "translate"
+            "chrome-chat.openai.com__-default": "openai",
+            "chrome-translate.google.com__-default": "translate"
         };
 
         const workspaceName = specialWorkspaces[appToplevel.appId];
