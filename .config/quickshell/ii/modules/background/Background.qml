@@ -276,9 +276,9 @@ Variants {
                     }
                     color: bgRoot.colText
                     style: Text.Raised
-                    visible: Config.options.background.mantra !== ""
+                    visible: Config.options.background.quote !== ""
                     styleColor: Appearance.colors.colShadow
-                    text: Config.options.background.mantra
+                    text: Config.options.background.quote
                 }
                 StyledText {
                     Layout.fillWidth: true
