@@ -22,17 +22,6 @@ DockButton {
     property bool appIsActive: appToplevel.toplevels.find(t => (t.activated == true)) !== undefined
 
     property bool isSeparator: appToplevel.appId === "SEPARATOR"
-
-    property var iconOverrides: {
-        // "kitty-special": "term",
-        // "kitty-update": "update",
-        // "kitty-install": "install",
-        // "kitty-uninstall": "uninstall",
-        // "kitty-english": "english",
-        "chrome-chat.openai.com__-default": { type: "path", value: "/home/javier/.config/quickshell/ii/assets/dock/ChatGPT.svg" },
-        "chrome-translate.google.com__-default": { type: "path", value: "/home/javier/.config/quickshell/ii/assets/dock/translate.svg" },
-    }
-
     property var desktopEntry: DesktopEntries.byId(appToplevel.appId)
     enabled: !isSeparator
     implicitWidth: isSeparator ? 1 : implicitHeight - topInset - bottomInset
@@ -130,18 +119,7 @@ DockButton {
                 }
                 active: !root.isSeparator
                 sourceComponent: IconImage {
-                    source: {
-                        const override = root.iconOverrides[appToplevel.appId];
-                        if (override) {
-                            if (override.type === "path") {
-                                return "file://" + override.value; // Format as a local file URL
-                            }
-                            // If type is "name", use it as an icon name
-                            return Quickshell.iconPath(override.value, "image-missing");
-                        }
-                        // Fallback to original behavior if no override exists
-                        return Quickshell.iconPath(AppSearch.guessIcon(appToplevel.appId), "image-missing");
-                    }
+                    source: Quickshell.iconPath(AppSearch.guessIcon(appToplevel.appId), "image-missing")
                     implicitSize: root.iconSize
                 }
             }

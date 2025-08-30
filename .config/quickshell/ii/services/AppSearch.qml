@@ -25,6 +25,9 @@ Singleton {
         "net.lutris.lutris": "net.lutris.Lutris",
         "org.gnome.texteditor": "org.gnome.TextEditor",
         "org.kde.kdeconnect.app": "kdeconnect",
+        "opentabletdriver.ux": "otd",
+        "chrome-chat.openai.com__-default": Quickshell.shellPath("assets/dock/ChatGPT.svg"),
+        "chrome-translate.google.com__-default": Quickshell.shellPath("assets/dock/translate.svg"),
         "kitty-yazi": "yazi",
         "kitty-btop": "btop",
     })
