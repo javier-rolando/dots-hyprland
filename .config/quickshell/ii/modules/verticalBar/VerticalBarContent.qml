@@ -87,7 +87,18 @@ Item { // Bar content region
 
         Bar.BarGroup {
             vertical: true
+
+            VerticalUpdateChecker {}
+        }
+
+        HorizontalBarSeparator {
+            visible: Config.options?.bar.borderless
+        }
+
+        Bar.BarGroup {
+            vertical: true
             padding: 8
+
             Resources {
                 Layout.fillWidth: true
                 Layout.fillHeight: false
