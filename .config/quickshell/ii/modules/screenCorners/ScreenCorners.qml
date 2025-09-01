@@ -70,7 +70,14 @@ Scope {
                         if (Config.options.sidebar.cornerOpen.clickless)
                             screenCorners.actionForCorner[cornerPanelWindow.corner]();
                     }
-                    onPressed: {
+                    acceptedButtons: Qt.LeftButton | Qt.RightButton
+                    onPressed: (event) => {
+                        if (event.button === Qt.RightButton) {
+                            if (Config.options.sidebar.cornerOpen.valueScroll && !cornerWidget.isLeft) {
+                                Audio.sink.audio.muted = !Audio.sink.audio.muted;
+                            }
+                            return;
+                        }
                         screenCorners.actionForCorner[cornerPanelWindow.corner]();
                     }
                     onScrollDown: {
