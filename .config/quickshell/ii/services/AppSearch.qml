@@ -26,8 +26,10 @@ Singleton {
         "org.gnome.texteditor": "org.gnome.TextEditor",
         "org.kde.kdeconnect.app": "kdeconnect",
         "opentabletdriver.ux": "otd",
+        "elden ring": Quickshell.shellPath("assets/dock/elden-ring.svg"),
+        "sonic origins": Quickshell.shellPath("assets/dock/sonic-the-hedgehog.svg"),
         "chrome-chat.openai.com__-default": Quickshell.shellPath("assets/dock/ChatGPT.svg"),
-        "chrome-translate.google.com__-default": Quickshell.shellPath("assets/dock/translate.svg"),
+        "chrome-translate.google.com__-default": "google-translate",
         "kitty-yazi": "yazi",
         "kitty-btop": "btop",
     })
