@@ -77,11 +77,7 @@ DockButton {
         const workspaceName = specialWorkspaces[appToplevel.appId];
 
         if (workspaceName) {
-            if (appToplevel.toplevels.length > 0) {
-                Hyprland.dispatch(`togglespecialworkspace ${workspaceName}`);
-            }
-            // NOTE: Launch logic is removed as per your implementation.
-            // If you want to launch the app when it's closed, add an 'else' block here.
+            Hyprland.dispatch(`togglespecialworkspace ${workspaceName}`);
             return;
         }
 
