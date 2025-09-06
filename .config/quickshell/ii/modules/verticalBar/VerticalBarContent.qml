@@ -121,8 +121,9 @@ Item { // Bar content region
             vertical: true
             padding: 6
 
-            Workspaces {
+            Bar.Workspaces {
                 id: workspacesWidget
+                vertical: true
                 MouseArea {
                     // Right-click to toggle overview
                     anchors.fill: parent
