@@ -28,6 +28,35 @@ colorlist=($colornames)     # Array of color names
 colorvalues=($colorstrings) # Array of color values
 
 apply_term() {
+  local kitty_conf_content
+  kitty_conf_content=$(
+    cat <<'EOF'
+# Kitty window border colors
+active_border_color     $term1
+inactive_border_color   $term1
+bell_border_color       $term3
+
+# Tab bar colors
+active_tab_foreground   $term0
+active_tab_background   $term2
+inactive_tab_foreground $term0
+inactive_tab_background $term7
+tab_bar_background      $term0
+EOF
+  )
+
+  for i in "${!colorlist[@]}"; do
+    local name_placeholder="${colorlist[$i]}"
+    local value="${colorvalues[$i]}"
+    kitty_conf_content="${kitty_conf_content//"$name_placeholder"/"$value"}"
+  done
+
+  # Elimina cualquier línea con placeholders que no fueron reemplazados
+  kitty_conf_content=$(echo "$kitty_conf_content" | grep -v '\$')
+
+  mkdir -p "$HOME/.config/kitty"
+  echo "$kitty_conf_content" >"$HOME/.config/kitty/colors.conf"
+
   # Check if terminal escape sequence template exists
   if [ ! -f "$SCRIPT_DIR/terminal/sequences.txt" ]; then
     echo "Template file not found for Terminal. Skipping that."
@@ -46,8 +75,9 @@ apply_term() {
   for file in /dev/pts/*; do
     if [[ $file =~ ^/dev/pts/[0-9]+$ ]]; then
       {
-      cat "$STATE_DIR"/user/generated/terminal/sequences.txt >"$file"
-      } & disown || true
+        cat "$STATE_DIR"/user/generated/terminal/sequences.txt >"$file"
+      } &
+      disown || true
     fi
   done
 }
@@ -68,5 +98,11 @@ else
   echo "Config file not found at $CONFIG_FILE. Applying terminal theming by default."
   apply_term &
 fi
+
+apply_vesktop() {
+  sass /home/javier/.config/vesktop/themes/material-discord.scss /home/javier/.config/vesktop/themes/material-discord.theme.css
+}
+
+apply_vesktop &
 
 # apply_qt & # Qt theming is already handled by kde-material-colors
