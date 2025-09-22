@@ -54,7 +54,7 @@ Variants {
         property real clockX: (modelData.width / 2)
         property real clockY: (modelData.height / 2)
         property var textHorizontalAlignment: {
-            if ((Config.options.background.lockBlur.enable && Config.options.background.lockBlur.centerClock && GlobalStates.screenLocked) || wallpaperSafetyTriggered)
+            if ((Config.options.lock.centerClock && GlobalStates.screenLocked) || wallpaperSafetyTriggered)
                 return Text.AlignHCenter;
             if (clockX < screen.width / 3)
                 return Text.AlignLeft;
@@ -63,7 +63,7 @@ Variants {
             return Text.AlignHCenter;
         }
         // Colors
-        property bool shouldBlur: (GlobalStates.screenLocked && Config.options.background.lockBlur.enable)
+        property bool shouldBlur: (GlobalStates.screenLocked && Config.options.lock.blur.enable)
         property color dominantColor: Appearance.colors.colPrimary
         property bool dominantColorIsDark: dominantColor.hslLightness < 0.5
         property color colText: {
@@ -230,9 +230,9 @@ Variants {
 
             Loader {
                 id: blurLoader
-                active: Config.options.background.lockBlur.enable && (GlobalStates.screenLocked || scaleAnim.running)
+                active: Config.options.lock.blur.enable && (GlobalStates.screenLocked || scaleAnim.running)
                 anchors.fill: wallpaper
-                scale: GlobalStates.screenLocked ? Config.options.background.lockBlur.extraZoom : 1
+                scale: GlobalStates.screenLocked ? Config.options.lock.blur.extraZoom : 1
                 Behavior on scale {
                     NumberAnimation {
                         id: scaleAnim
@@ -243,7 +243,7 @@ Variants {
                 }
                 sourceComponent: GaussianBlur {
                     source: wallpaper
-                    radius: GlobalStates.screenLocked ? Config.options.background.lockBlur.radius : 0
+                    radius: GlobalStates.screenLocked ? Config.options.lock.blur.radius : 0
                     samples: radius * 2 + 1
 
                     Rectangle {
@@ -279,7 +279,7 @@ Variants {
                 }
                 states: State {
                     name: "centered"
-                    when: (bgRoot.shouldBlur && Config.options.background.lockBlur.centerClock) || bgRoot.wallpaperSafetyTriggered
+                    when: (GlobalStates.screenLocked && Config.options.lock.centerClock) || bgRoot.wallpaperSafetyTriggered
                     AnchorChanges {
                         target: clockLoader
                         anchors {
@@ -339,28 +339,36 @@ Variants {
 
                     Loader {
                         id: cookieClockLoader
+                        Layout.alignment: Qt.AlignHCenter
                         visible: root.clockStyle === "cookie"
                         active: visible
                         sourceComponent: CookieClock {}
                     }
 
                     Item {
-                        Layout.alignment: Qt.AlignHCenter
+                        Layout.alignment: {
+                            if (bgRoot.textHorizontalAlignment === Text.AlignHCenter || root.clockStyle === "cookie")
+                                return Qt.AlignHCenter;
+                            return (bgRoot.textHorizontalAlignment === Text.AlignLeft ? Qt.AlignLeft : Qt.AlignRight)
+                        }
+                        Layout.leftMargin: -26
+                        Layout.rightMargin: -26
                         implicitWidth: statusTextBg.implicitWidth
                         implicitHeight: statusTextBg.implicitHeight
 
                         StyledRectangularShadow {
                             target: statusTextBg
-                            visible: statusTextBg.visible
+                            visible: statusTextBg.visible && cookieClockLoader.active
                             opacity: statusTextBg.opacity
                         }
 
                         Rectangle {
                             id: statusTextBg
+                            clip: true
                             opacity: (safetyStatusText.shown || lockStatusText.shown) ? 1 : 0
                             visible: opacity > 0
                             implicitHeight: statusTextRow.implicitHeight + 5 * 2
-                            implicitWidth: statusTextRow.implicitWidth + 10 * 2
+                            implicitWidth: statusTextRow.implicitWidth + 5 * 2
                             radius: Appearance.rounding.small
                             color: CF.ColorUtils.transparentize(Appearance.colors.colSecondaryContainer, cookieClockLoader.active ? 0 : 1)
 
@@ -377,7 +385,7 @@ Variants {
                             RowLayout {
                                 id: statusTextRow
                                 anchors.centerIn: parent
-                                spacing: 16
+                                spacing: 14
                                 Item {
                                     Layout.fillWidth: bgRoot.textHorizontalAlignment !== Text.AlignLeft
                                     implicitWidth: 1
@@ -390,7 +398,7 @@ Variants {
                                 }
                                 ClockStatusText {
                                     id: lockStatusText
-                                    shown: GlobalStates.screenLocked && (!Config.options.background.lockBlur.enable || Config.options.background.lockBlur.showLockedText)
+                                    shown: GlobalStates.screenLocked && Config.options.lock.showLockedText
                                     statusIcon: "lock"
                                     statusText: qsTr("Locked")
                                 }
