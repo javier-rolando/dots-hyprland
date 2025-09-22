@@ -14,9 +14,42 @@ ContentPage {
 
         ConfigSwitch {
             text: Translation.tr("Show clock")
-            checked: Config.options.background.showClock
+            checked: Config.options.background.clock.show
             onCheckedChanged: {
-                Config.options.background.showClock = checked;
+                Config.options.background.clock.show = checked;
+            }
+        }
+
+        ConfigSpinBox {
+            text: Translation.tr("Scale (%)")
+            value: Config.options.background.clock.scale * 100
+            from: 1
+            to: 200
+            stepSize: 2
+            onValueChanged: {
+                Config.options.background.clock.scale = value / 100;
+            }
+        }
+
+        ContentSubsection {
+            title: Translation.tr("Clock style")
+            ConfigSelectionArray {
+                currentValue: Config.options.background.clock.style
+                onSelected: newValue => {
+                    Config.options.background.clock.style = newValue;
+                }
+                options: [
+                    {
+                        displayName: Translation.tr("Simple digital"),
+                        icon: "timer_10",
+                        value: "digital"
+                    },
+                    {
+                        displayName: Translation.tr("Material cookie"),
+                        icon: "cookie",
+                        value: "cookie"
+                    },
+                ]
             }
         }
 
