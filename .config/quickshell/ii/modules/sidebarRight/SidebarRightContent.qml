@@ -63,7 +63,7 @@ Item {
                     id: distroIcon
                     width: 25
                     height: 25
-                    source: SystemInfo.distroIcon
+                    source: "hyprland-symbolic"
                     colorize: true
                     color: Appearance.colors.colOnLayer0
                 }
