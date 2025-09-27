@@ -162,7 +162,7 @@ Item {
                     values: {
                         // console.log(JSON.stringify(ToplevelManager.toplevels.values.map(t => t), null, 2))
                         return ToplevelManager.toplevels.values.filter((toplevel) => {
-                            const address = `0x${toplevel.HyprlandToplevel.address}`
+                            const address = `0x${toplevel.HyprlandToplevel?.address}`
                             var win = windowByAddress[address]
                             const inWorkspaceGroup = (root.workspaceGroup * root.workspacesShown < win?.workspace?.id && win?.workspace?.id <= (root.workspaceGroup + 1) * root.workspacesShown)
                             return inWorkspaceGroup;
@@ -251,7 +251,7 @@ Item {
                         StyledToolTip {
                             extraVisibleCondition: false
                             alternativeVisibleCondition: dragArea.containsMouse && !window.Drag.active
-                            text: `${windowData.title}\n[${windowData.class}] ${windowData.xwayland ? "[XWayland] " : ""}\n`
+                            text: `${windowData.title}\n[${windowData.class}] ${windowData.xwayland ? "[XWayland] " : ""}`
                         }
                     }
                 }
