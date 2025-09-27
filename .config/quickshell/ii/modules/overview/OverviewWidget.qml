@@ -34,7 +34,12 @@ Item {
         "7": "七",
         "8": "八",
         "9": "九",
-        "10": "十"
+        "10": "十",
+        "11": "十一",
+        "12": "十二",
+        "13": "十三",
+        "14": "十四",
+        "15": "十五",
     }
 
     property real workspaceImplicitWidth: (monitorData?.transform % 2 === 1) ? 
