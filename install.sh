@@ -13,12 +13,17 @@ set -e
 # 0. Before we start
 source ./scriptdata/install-greeting.sh
 #####################################################################################
-printf "${COLOR_CYAN}[$0]: 1. Install dependencies\n${COLOR_RESET}"
-# TODO: if `--via-nix` is specified, source `install-deps-nix` instead.
-source ./scriptdata/install-deps-arch.sh
+if [[ "${SKIP_ALLDEPS}" != true ]]; then
+  printf "${STY_CYAN}[$0]: 1. Install dependencies\n${STY_RESET}"
+  source ./scriptdata/install-deps.sh
+fi
 #####################################################################################
-printf "${COLOR_CYAN}[$0]: 2. Setup for user groups/services etc\n${COLOR_RESET}"
-source ./scriptdata/install-setups.sh
+if [[ "${SKIP_ALLSETUPS}" != true ]]; then
+  printf "${STY_CYAN}[$0]: 2. Setup for permissions/services etc\n${STY_RESET}"
+  source ./scriptdata/install-setups.sh
+fi
 #####################################################################################
-printf "${COLOR_CYAN}[$0]: 3. Copying + Configuring\n${COLOR_RESET}"
-source ./scriptdata/install-files.sh
+if [[ "${SKIP_ALLFILES}" != true ]]; then
+  printf "${STY_CYAN}[$0]: 3. Copying config files\n${STY_RESET}"
+  source ./scriptdata/install-files.sh
+fi
