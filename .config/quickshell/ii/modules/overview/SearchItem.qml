@@ -93,7 +93,11 @@ RippleButton {
 
     onClicked: {
         GlobalStates.overviewOpen = false
-        root.itemExecute()
+        if (root.entry.runInTerminal) {
+            Quickshell.execDetached(["bash", "-c", `${Config.options.apps.terminal} fish -c '${root.entry.execString}'`]);
+        } else {
+            root.itemExecute();
+        }
     }
     Keys.onPressed: (event) => {
         if (event.key === Qt.Key_Return || event.key === Qt.Key_Enter) {
