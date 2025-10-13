@@ -99,10 +99,10 @@ else
   apply_term &
 fi
 
-apply_vesktop() {
-  sass /home/javier/.config/vesktop/themes/material-discord.scss /home/javier/.config/vesktop/themes/material-discord.theme.css
-}
-
-apply_vesktop &
+# apply_vesktop() {
+#   sass /home/javier/.config/vesktop/themes/material-discord.scss /home/javier/.config/vesktop/themes/material-discord.theme.css
+# }
+#
+# apply_vesktop &
 
 # apply_qt & # Qt theming is already handled by kde-material-colors
