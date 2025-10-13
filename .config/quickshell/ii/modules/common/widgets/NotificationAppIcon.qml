@@ -35,8 +35,8 @@ MaterialCookie { // App icon
     lowerBodies().every(b => b.includes("from kick"))
 
     implicitSize: 38 * scale
-    sides: isUrgent ? 12 : 0
-    amplitude: implicitSize / 30
+    sides: isUrgent ? 10 : 0
+    amplitude: implicitSize / 24
 
     color: isUrgent ? Appearance.colors.colPrimary : Appearance.colors.colSecondaryContainer
     Loader {
