@@ -175,7 +175,7 @@ Singleton {
                     property bool enableWorkspace: true
                     property real workspaceZoom: 1.07 // Relative to your screen, not wallpaper size
                     property bool enableSidebar: true
-                    property real clockFactor: 0.8
+                    property real clockFactor: 1.13
                 }
             }
 
@@ -388,9 +388,10 @@ Singleton {
                     property bool bottom: false
                     property bool valueScroll: true
                     property bool clickless: false
-                    property real cornerRegionWidth: 60
+                    property real cornerRegionWidth: 250
                     property real cornerRegionHeight: 2
                     property bool visualize: false
+                    property bool clicklessCornerEnd: true
                 }
             }
 

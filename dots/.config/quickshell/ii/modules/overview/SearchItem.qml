@@ -100,7 +100,13 @@ RippleButton {
         }
     }
     Keys.onPressed: (event) => {
-        if (event.key === Qt.Key_Return || event.key === Qt.Key_Enter) {
+        if (event.key === Qt.Key_Delete && event.modifiers === Qt.ShiftModifier) {
+            const deleteAction = root.entry.actions.find(action => action.name == "Delete");
+
+            if (deleteAction) {
+                deleteAction.execute()
+            }
+        } else if (event.key === Qt.Key_Return || event.key === Qt.Key_Enter) {
             root.keyboardDown = true
             root.clicked()
             event.accepted = true;
