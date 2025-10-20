@@ -139,6 +139,7 @@ Singleton {
                 property string networkEthernet: "kcmshell6 kcm_networkmanagement"
                 property string taskManager: "plasma-systemmonitor --page-name Processes"
                 property string terminal: "kitty -1" // This is only for shell actions
+                property string volumeMixer: `~/.config/hypr/hyprland/scripts/launch_first_available.sh "pavucontrol-qt" "pavucontrol"`
             }
 
             property JsonObject background: JsonObject {
@@ -211,6 +212,7 @@ Singleton {
                     property bool showKeyboardToggle: true
                     property bool showDarkModeToggle: true
                     property bool showPerformanceProfileToggle: false
+                    property bool showScreenRecord: false
                 }
                 property JsonObject tray: JsonObject {
                     property bool monochromeIcons: true
@@ -244,6 +246,7 @@ Singleton {
             property JsonObject battery: JsonObject {
                 property int low: 20
                 property int critical: 5
+                property int full: 101
                 property bool automaticSuspend: true
                 property int suspend: 3
             }
@@ -399,12 +402,12 @@ Singleton {
                     property JsonObject android: JsonObject {
                         property int columns: 5
                         property list<var> toggles: [
-                            { type: "network", size: 2 },
-                            { type: "bluetooth", size: 2 },
-                            { type: "idleInhibitor", size: 1 },
-                            { type: "easyEffects", size: 1 },
-                            { type: "nightLight", size: 2 },
-                            { type: "darkMode", size: 2 }
+                            { "size": 2, "type": "network" },
+                            { "size": 2, "type": "bluetooth"  },
+                            { "size": 1, "type": "idleInhibitor" },
+                            { "size": 1, "type": "mic" },
+                            { "size": 2, "type": "audio" },
+                            { "size": 2, "type": "nightLight" }
                         ]
                     }
                 }
@@ -417,13 +420,18 @@ Singleton {
                 }
             }
 
+            property JsonObject sounds: JsonObject {
+                property bool battery: false
+                property bool pomodoro: false
+                property string theme: "freedesktop"
+            }
+
             property JsonObject time: JsonObject {
                 // https://doc.qt.io/qt-6/qtime.html#toString
                 property string format: "hh:mm"
                 property string shortDateFormat: "dd/MM"
                 property string dateFormat: "ddd, dd/MM"
                 property JsonObject pomodoro: JsonObject {
-                    property string alertSound: ""
                     property int breakTime: 300
                     property int cyclesBeforeLongBreak: 4
                     property int focus: 1500
