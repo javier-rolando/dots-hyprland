@@ -27,6 +27,55 @@ IFS=$'\n'
 colorlist=($colornames)     # Array of color names
 colorvalues=($colorstrings) # Array of color values
 
+apply_konsole() {
+  # Check if Konsole template exists
+  local template_file="$SCRIPT_DIR/konsole/template.colorscheme"
+  if [ ! -f "$template_file" ]; then
+    echo "Template file not found for Konsole. Skipping that."
+    return
+  fi
+
+  # Define the target file to be the one from kde-material-you
+  local target_scheme_file="$HOME/.local/share/konsole/MaterialYou.colorscheme"
+
+  # Wait for a moment to ensure other theming scripts (like kde-material-you-colors)
+  # have finished running before we apply our final changes.
+  sleep 2
+
+  # If the target file doesn't exist after waiting, we can't proceed.
+  # This is unlikely if kde-material-you-colors runs as expected.
+  if [ ! -f "$target_scheme_file" ]; then
+      echo "Konsole scheme 'MaterialYou.colorscheme' not found after waiting."
+      # As a fallback, let's still try to create it.
+  fi
+
+  # Overwrite the target file with our template
+  cp "$template_file" "$target_scheme_file"
+
+  # Apply colors to the target file
+  for i in "${!colorlist[@]}"; do
+    local color_name="${colorlist[$i]}"
+    local hex_color="${colorvalues[$i]}"
+    
+    # Convert hex to R,G,B
+    hex_color=${hex_color#\#}
+    # handle short hex colors like #fff
+    if [ ${#hex_color} == 3 ]; then
+      hex_color="${hex_color:0:1}${hex_color:0:1}${hex_color:1:1}${hex_color:1:1}${hex_color:2:1}${hex_color:2:1}"
+    fi
+
+    # Check if hex_color is a valid hex string
+        if [[ $hex_color =~ ^[0-9a-fA-F]{6}$ ]]; then
+          local r=$((16#${hex_color:0:2}))
+          local g=$((16#${hex_color:2:2}))
+          local b=$((16#${hex_color:4:2}))
+          local rgb_color="$r,$g,$b"
+    
+          sed -i "s|%${color_name#\$}%|${rgb_color}|g" "$target_scheme_file"
+        fi
+      done
+}
+
 apply_term() {
   local kitty_conf_content
   kitty_conf_content=$(
@@ -93,10 +142,12 @@ if [ -f "$CONFIG_FILE" ]; then
   enable_terminal=$(jq -r '.appearance.wallpaperTheming.enableTerminal' "$CONFIG_FILE")
   if [ "$enable_terminal" = "true" ]; then
     apply_term &
+    apply_konsole &
   fi
 else
   echo "Config file not found at $CONFIG_FILE. Applying terminal theming by default."
   apply_term &
+  apply_konsole &
 fi
 
 # apply_vesktop() {
