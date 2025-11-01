@@ -125,7 +125,7 @@ Item {
 
                             StyledText {
                                 anchors.centerIn: parent
-                                text: workspaceValueMap[workspaceValue] || workspaceValue
+                                text: workspaceValueMap[workspace.workspaceValue] || workspace.workspaceValue
                                 font {
                                     pixelSize: root.workspaceNumberSize * root.scale
                                     weight: Font.DemiBold
