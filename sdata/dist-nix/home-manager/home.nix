@@ -4,6 +4,8 @@
   nixGL.packages = nixgl.packages;
   nixGL.defaultWrapper = "mesa";
 
+  # TODO: The home.nix generates ~/.config/fontconfig conflicts with the one under dots/
+  # TODO: The home.nix generates ~/.config/xdg-desktop-portal conflicts with the one under dots/
   xdg.portal = {
     enable = true;
     extraPortals = with pkgs; [
@@ -205,7 +207,8 @@
     ]
     ++ [
     #(config.lib.nixGL.wrap pkgs.hyprland)
-    (config.lib.nixGL.wrap quickshell.packages.x86_64-linux.default)
+    #(config.lib.nixGL.wrap quickshell.packages.x86_64-linux.default)
+    (import ./quickshell.nix { inherit pkgs quickshell; nixGLWrap = config.lib.nixGL.wrap; })
     ];
   }//home_attrs;
 }
