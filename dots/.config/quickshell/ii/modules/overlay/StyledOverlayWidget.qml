@@ -22,6 +22,8 @@ AbstractOverlayWidget {
 
     required property Item contentItem
     property bool fancyBorders: true
+    property bool showCenterButton: false
+    property bool showClickabilityButton: true
 
     required property var modelData
     readonly property string identifier: modelData.identifier
@@ -41,9 +43,10 @@ AbstractOverlayWidget {
     drag {
         minimumX: 0
         minimumY: 0
-        maximumX: root.parent.width - root.width
-        maximumY: root.parent.height - root.height
+        maximumX: root.parent?.width - root.width
+        maximumY: root.parent?.height - root.height
     }
+    opacity: (GlobalStates.overlayOpen || !clickthrough) ? 1.0 : Config.options.overlay.clickthroughOpacity
 
     // Guarded states & registration funcs
     property bool open: Persistent.states.overlay.open
@@ -86,7 +89,7 @@ AbstractOverlayWidget {
 
     function center() {
         const targetX = (root.parent.width - contentColumn.width) / 2
-        const targetY = (root.parent.height - contentItem.height) / 2 - titleBar.implicitHeight
+        const targetY = (root.parent.height - contentItem.height) / 2 - titleBar.implicitHeight + border.border.width
         root.x = targetX
         root.y = targetY
         root.savePosition(targetX, targetY)
@@ -128,9 +131,8 @@ AbstractOverlayWidget {
                 id: titleBar
                 opacity: GlobalStates.overlayOpen ? 1 : 0
                 Layout.fillWidth: true
-                property real padding: 6
-                implicitWidth: titleBarRow.implicitWidth + padding * 2
-                implicitHeight: titleBarRow.implicitHeight + padding * 2
+                implicitWidth: titleBarRow.implicitWidth + root.padding * 2
+                implicitHeight: titleBarRow.implicitHeight + root.padding * 2
                 color: root.fancyBorders ? "transparent" : Appearance.colors.colLayer1
                 // border.color: Appearance.colors.colOutlineVariant
                 // border.width: 1
@@ -139,14 +141,13 @@ AbstractOverlayWidget {
                     id: titleBarRow
                     anchors {
                         fill: parent
-                        margins: titleBar.padding
-                        leftMargin: titleBar.padding + 8
-                        bottomMargin: root.fancyBorders ? 0 : titleBar.padding
+                        margins: root.padding
                     }
-                    spacing: 0
+                    spacing: 2
 
                     MaterialSymbol {
                         text: root.materialSymbol
+                        Layout.leftMargin: 6
                         iconSize: 20
                         Layout.alignment: Qt.AlignVCenter
                         Layout.rightMargin: 4
@@ -159,6 +160,7 @@ AbstractOverlayWidget {
                     }
 
                     TitlebarButton {
+                        visible: root.showCenterButton
                         materialSymbol: "recenter"
                         onClicked: root.center()
                         StyledToolTip {
@@ -167,6 +169,7 @@ AbstractOverlayWidget {
                     }
 
                     TitlebarButton {
+                        visible: (root.pinned && root.showClickabilityButton)
                         materialSymbol: "mouse"
                         toggled: !root.clickthrough
                         onClicked: root.toggleClickthrough()
@@ -200,6 +203,7 @@ AbstractOverlayWidget {
                 Layout.fillWidth: true
                 Layout.fillHeight: true
                 Layout.margins: root.fancyBorders ? root.padding : 0
+                Layout.topMargin: -border.border.width // Border of a rectangle is drawn inside its bounds, so we do this to make the gap not too big
                 Layout.alignment: Qt.AlignHCenter | Qt.AlignVCenter
                 implicitWidth: root.contentItem.implicitWidth
                 implicitHeight: root.contentItem.implicitHeight
