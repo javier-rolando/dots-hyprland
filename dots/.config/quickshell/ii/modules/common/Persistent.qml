@@ -104,7 +104,8 @@ Singleton {
                     property bool pinned: false
                     property bool clickthrough: false
                     property real x: 80
-                    property real y: 250
+                    property real y: 280
+                    property int tabIndex: 0
                 }
             }
 
