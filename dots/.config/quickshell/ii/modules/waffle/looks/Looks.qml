@@ -17,6 +17,12 @@ Singleton {
 
     property real backgroundTransparency: 0.17
     property real contentTransparency: 0.25
+    function applyBackgroundTransparency(col) {
+        return ColorUtils.applyAlpha(col, 1 - root.backgroundTransparency)
+    }
+    function applyContentTransparency(col) {
+        return ColorUtils.applyAlpha(col, 1 - root.contentTransparency)
+    }
     colors: QtObject {
         id: colors
         property color ambientShadow: ColorUtils.transparentize("#000000", 0.75)
@@ -35,12 +41,17 @@ Singleton {
         property color bg2Border: root.dark ? "#464646" : "#EEEEEE"
         property color fg: root.dark ? "#FFFFFF" : "#000000"
         property color fg1: root.dark ? "#D1D1D1" : "#626262"
+        property color controlBg: root.dark ? "#9B9B9B" : "#868686"
+        property color controlFg: root.dark ? "#454545" : "#FFFFFF"
         property color danger: "#C42B1C"
         property color dangerActive: "#B62D1F"
         property color warning: "#FF9900"
         // property color accent: root.dark ? "#A5C6D8" : "#5377A3"
-        property color accent: Appearance.m3colors.m3primary
+        property color accent: Appearance.colors.colPrimary
+        property color accentHover: Appearance.colors.colPrimaryHover
+        property color accentActive: Appearance.colors.colPrimaryActive
         property color accentUnfocused: root.dark ? "#989898" : "#848484"
+        property color accentFg: ColorUtils.isDark(accent) ? "#FFFFFF" : "#000000"
     }
 
     radius: QtObject {
@@ -71,6 +82,9 @@ Singleton {
 
     transition: QtObject {
         id: transition
+
+        property int velocity: 850
+
         property QtObject easing: QtObject {
             property QtObject bezierCurve: QtObject {
                 readonly property list<real> easeInOut: [0.42,0.00,0.58,1.00,1,1]
@@ -130,6 +144,14 @@ Singleton {
         property Component anchor: Component {
             AnchorAnimation {
                 duration: 160
+                easing.type: Easing.BezierSpline
+                easing.bezierCurve: transition.easing.bezierCurve.easeIn
+            }
+        }
+
+        property Component longMovement: Component {
+            NumberAnimation {
+                duration: 1000
                 easing.type: Easing.BezierSpline
                 easing.bezierCurve: transition.easing.bezierCurve.easeIn
             }
