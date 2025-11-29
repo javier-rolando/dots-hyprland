@@ -311,7 +311,6 @@ Item { // Notification item area
                                     }
                                 }
                             }
-                        }
 
                             NotificationActionButton {
                                 Layout.fillWidth: true
