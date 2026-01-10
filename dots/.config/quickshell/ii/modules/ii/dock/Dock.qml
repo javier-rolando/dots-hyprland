@@ -182,7 +182,10 @@ Scope { // Scope
                                             if (event.button === Qt.LeftButton) {
                                                 mediaPlayerItem.activePlayer.togglePlaying();
                                             } else if (event.button === Qt.RightButton) {
-                                                mediaPlayerItem.activePlayer.next();
+                                                var spotifyWindow = HyprlandData.windowList.find(function(win) { return win.class && win.class.toLowerCase() === "spotify" });
+                                                if (spotifyWindow) {
+                                                    Hyprland.dispatch("closewindow address:" + spotifyWindow.address);
+                                                }
                                             } else if (event.button === Qt.BackButton) {
                                                 mediaPlayerItem.activePlayer.previous();
                                             } else if (event.button === Qt.ForwardButton) {
