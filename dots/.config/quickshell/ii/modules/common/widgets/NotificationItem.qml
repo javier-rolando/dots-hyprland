@@ -296,11 +296,13 @@ Item { // Notification item area
                                         if (modelData.identifier === "default") {
                                             if (isTwitchNotification) {
                                                 const channel = extractStreamer(notificationObject.body);
-                                                Qt.openUrlExternally("https://www.twitch.tv/" + (streamerMap[channel] || channel || ""));
+                                                // Qt.openUrlExternally("https://www.twitch.tv/" + (streamerMap[channel] || channel || ""));
+                                                Quickshell.execDetached(["brave", "--profile-directory=Default", "https://www.twitch.tv/" + (streamerMap[channel] || channel || "")]);
                                                 Notifications.discardNotification(notificationObject.notificationId);
                                             } else if (isKickNotification) {
                                                 const channel = extractStreamer(notificationObject.body);
-                                                Qt.openUrlExternally("https://kick.com/" + (channel || ""));
+                                                // Qt.openUrlExternally("https://kick.com/" + (channel || ""));
+                                                Quickshell.execDetached(["brave", "--profile-directory=Default", "https://kick.com/" + (channel || "")]);
                                                 Notifications.discardNotification(notificationObject.notificationId);
                                             } else {
                                                 Notifications.attemptInvokeAction(notificationObject.notificationId, modelData.identifier);
