@@ -103,9 +103,9 @@ DockButton {
         root.desktopEntry?.execute();
     }
 
-    altAction: () => {
-        TaskbarApps.togglePin(appToplevel.appId);
-    }
+    // altAction: () => {
+    //     TaskbarApps.togglePin(appToplevel.appId);
+    // }
 
     contentItem: Loader {
         active: !isSeparator
