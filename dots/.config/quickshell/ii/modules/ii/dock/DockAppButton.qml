@@ -80,6 +80,16 @@ DockButton {
             return;
         }
 
+        if (appToplevel.appId === "chrome-gemini.google.com__app-default") {
+            if (appToplevel.toplevels.length === 0) {
+                Hyprland.dispatch('exec chromium --app="https://gemini.google.com/app"');
+            } else {
+                lastFocused = (lastFocused + 1) % appToplevel.toplevels.length;
+                appToplevel.toplevels[lastFocused].activate();
+            }
+            return;
+        }
+
         const workspaceName = specialWorkspaces[appToplevel.appId];
 
         if (workspaceName) {
