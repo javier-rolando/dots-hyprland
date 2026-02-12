@@ -77,35 +77,6 @@ apply_konsole() {
 }
 
 apply_term() {
-  local kitty_conf_content
-  kitty_conf_content=$(
-    cat <<'EOF'
-# Kitty window border colors
-active_border_color     $term1
-inactive_border_color   $term1
-bell_border_color       $term3
-
-# Tab bar colors
-active_tab_foreground   $term0
-active_tab_background   $term2
-inactive_tab_foreground $term0
-inactive_tab_background $term7
-tab_bar_background      $term0
-EOF
-  )
-
-  for i in "${!colorlist[@]}"; do
-    local name_placeholder="${colorlist[$i]}"
-    local value="${colorvalues[$i]}"
-    kitty_conf_content="${kitty_conf_content//"$name_placeholder"/"$value"}"
-  done
-
-  # Elimina cualquier línea con placeholders que no fueron reemplazados
-  kitty_conf_content=$(echo "$kitty_conf_content" | grep -v '\$')
-
-  mkdir -p "$HOME/.config/kitty"
-  echo "$kitty_conf_content" >"$HOME/.config/kitty/colors.conf"
-
   # Check if terminal escape sequence template exists
   if [ ! -f "$SCRIPT_DIR/terminal/sequences.txt" ]; then
     echo "Template file not found for Terminal. Skipping that."
@@ -124,11 +95,79 @@ EOF
   for file in /dev/pts/*; do
     if [[ $file =~ ^/dev/pts/[0-9]+$ ]]; then
       {
-        cat "$STATE_DIR"/user/generated/terminal/sequences.txt >"$file"
-      } &
-      disown || true
+      cat "$STATE_DIR"/user/generated/terminal/sequences.txt >"$file"
+      } & disown || true
     fi
   done
+}
+
+apply_kitty() {
+  local kitty_conf_content
+  
+  # 1. Definimos el template limpio para Kitty
+  # Usamos 'EOF' con comillas para que Bash no intente expandir las variables antes de tiempo
+  kitty_conf_content=$(cat <<'EOF'
+# Kitty window border colors
+active_border_color     $term1
+inactive_border_color   $term1
+bell_border_color       $term3
+
+# Tab bar colors
+active_tab_foreground   $term0
+active_tab_background   $term2
+inactive_tab_foreground $term0
+inactive_tab_background $term7
+tab_bar_background      $term0
+
+# Default colors (0-15)
+color0  $term0
+color1  $term1
+color2  $term2
+color3  $term3
+color4  $term4
+color5  $term5
+color6  $term6
+color7  $term7
+color8  $term8
+color9  $term9
+color10 $term10
+color11 $term11
+color12 $term12
+color13 $term13
+color14 $term14
+color15 $term15
+
+# Persistencia de colores base
+foreground           $term7
+background           $term0
+cursor               $term7
+selection_foreground $term0
+selection_background $term7
+EOF
+  )
+
+  # 2. Reemplazo de placeholders mediante un archivo temporal y sed
+  local tmp_colors=$(mktemp)
+  echo "$kitty_conf_content" > "$tmp_colors"
+
+  for i in "${!colorlist[@]}"; do
+    local name="${colorlist[$i]}"    # Ej: $term10
+    local value="${colorvalues[$i]}"  # Ej: #FFFFFF
+    
+    # Reemplazamos el placeholder exacto (cuando termina en espacio o fin de línea)
+    # Esto evita que $term1 pise a $term10, $term11, etc.
+    sed -i "s|\\${name}\$|${value}|g" "$tmp_colors"
+    sed -i "s|\\${name} |${value} |g" "$tmp_colors"
+  done
+
+  # 3. Escribir el archivo de configuración final
+  mkdir -p "$HOME/.config/kitty"
+  cat "$tmp_colors" > "$HOME/.config/kitty/colors.conf"
+  rm "$tmp_colors"
+
+  # 4. Notificar a Kitty para recarga inmediata
+  # Esto aplica los cambios a todas las ventanas abiertas de Kitty sin cerrarlas
+  pkill -USR1 kitty 2>/dev/null || true
 }
 
 apply_qt() {
@@ -143,11 +182,13 @@ if [ -f "$CONFIG_FILE" ]; then
   if [ "$enable_terminal" = "true" ]; then
     apply_term &
     apply_konsole &
+    apply_kitty &
   fi
 else
   echo "Config file not found at $CONFIG_FILE. Applying terminal theming by default."
   apply_term &
   apply_konsole &
+  apply_kitty &
 fi
 
 # apply_vesktop() {
