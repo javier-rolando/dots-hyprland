@@ -102,7 +102,7 @@ RippleButton {
     onClicked: {
         GlobalStates.overviewOpen = false
         if (root.entry.runInTerminal) {
-            Quickshell.execDetached(["bash", "-c", `${Config.options.apps.terminal} fish -c '${root.entry.execString}'`]);
+            Quickshell.execDetached(["bash", "-c", `${Config.options.apps.terminal} fish -c '${root.entry.id}'`]);
         } else {
             root.itemExecute();
         }
